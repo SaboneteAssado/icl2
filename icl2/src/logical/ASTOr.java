@@ -1,17 +1,16 @@
 package logical;
 
-import atsnode.ASTNode;
-import atsnode.Enviroment;
-import compilacao.Code;
-import compilacao.IComp;
-import exceptions.InvalidElementsException;
-import itype.IType;
-import itype.ITypeBool;
-import ivalue.IValue;
-import ivalue.IValueBool;
+import astNode.ASTNode;
+import astNode.EnvironmentAbs;
+import compiler.CodeAbs;
+import compiler.CompEnvAbs;
+import iValue.IValue;
+import iValue.VInt;
+import iValue.VBool;
+
 /**
- * Logical Operation OR
- * @author Ines Ribeiro 47226 Sofia Martins 47508
+ * Logical ||
+ * @author Miguel Araujo 45699
  *
  */
 public class ASTOr implements ASTNode {
@@ -25,38 +24,24 @@ public class ASTOr implements ASTNode {
 	}
 
 	/**
-	 * Evaluates the expressions and submits them to the logical operation OR
+	 * Evaluates the exps and checks exp1 || exp2
 	 */
 	@Override
-	public IValue eval(Enviroment<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		IValue v2 = expr2.eval(env);
-		return new IValueBool(((IValueBool) v1).getValue() || ((IValueBool)v2).getValue());
-	}
-
-	/**
-	 * Checks the type of a logical OR expression.
-	 */
-	@Override
-	public IType typeCheck(Enviroment<IType> env) {
-		IType expr1_type = null;
-		IType expr2_type = null;
-		try {
-			expr1_type = expr1.typeCheck(env);
-			expr2_type = expr2.typeCheck(env);
-			if (!(expr1_type instanceof ITypeBool && expr2_type instanceof ITypeBool))
-					throw new InvalidElementsException("Invalid Type of Expressions.") ;
-		} catch (InvalidElementsException e) {
-			System.out.println(e.getMessage());
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
+			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
+				return new VBool(((VBool) v1).getVal() || ((VBool)v2).getVal());
+			}
 		}
-		return expr1_type;
+		throw new Exception("Illegal arguments to || operator");
 	}
 	
 	/**
-	 * Emits the code necessary for jasmin to compile the logical OR.
+	 * Compile ||
 	 */
-	public void compile (Code code, IComp env) {
+	public void compile (CodeAbs code, CompEnvAbs env) {
 		expr1.compile(code, env);
 		expr2.compile(code, env);
 		code.emit("ior");

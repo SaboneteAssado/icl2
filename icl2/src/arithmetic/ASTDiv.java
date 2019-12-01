@@ -22,17 +22,21 @@ public class ASTDiv implements ASTNode {
 	}
 
 	/**
-	 * Evaluates each expression and divides.
+	 * Evaluates exps and exp1/exp2.
 	 */
 	@Override
-	public IValue eval(EnvironmentAbs<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		IValue v2 = expr2.eval(env);
-		return new VInt(((VInt)v1).getVal() / ((VInt)v2).getVal());
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
+			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
+				return new VInt(((VInt)v1).getVal() / ((VInt)v2).getVal());
+			}
+		}
+		throw new Exception("Illegal arguments to / operator");
 
 	}
-	
+
 	@Override
 	public void compile(CodeAbs code, CompEnvAbs Cenv) {
 		expr1.compile(code, Cenv);

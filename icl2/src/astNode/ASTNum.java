@@ -1,6 +1,5 @@
-package arithmetic;
-import astNode.ASTNode;
-import astNode.EnvironmentAbs;
+package astNode;
+
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;

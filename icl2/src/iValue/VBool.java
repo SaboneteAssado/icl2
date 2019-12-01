@@ -13,7 +13,7 @@ public class VBool implements IValue {
 		this.bool = bool;
 	}
 
-	public boolean getValue() {
+	public boolean getVal() {
 		return bool;
 	}
 

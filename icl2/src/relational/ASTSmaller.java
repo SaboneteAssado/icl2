@@ -1,8 +1,16 @@
 package relational;
 
+import astNode.ASTNode;
+import astNode.EnvironmentAbs;
+import compiler.CodeAbs;
+import compiler.CompEnvAbs;
+import iValue.IValue;
+import iValue.VBool;
+import iValue.VInt;
+
 /**
- * Relation Operation of Smaller.
- * @author Ines Ribeiro 47226 Sofia Martins 47508
+ * Relation <
+ * @author Miguel Araujo 45699
  *
  */
 public class ASTSmaller implements ASTNode {
@@ -15,14 +23,18 @@ public class ASTSmaller implements ASTNode {
 	}
 
 	/**
-	 * Evaluates the exps and checks if exp1 is smaller than exp2
+	 * Evaluates the exps and checks if exp1 < exp2
 	 */
 	@Override
-	public IValue eval(Enviroment<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		IValue v2 = expr2.eval(env);
-		return new IValueBool(((IValueInt) v1).getValue() < ((IValueInt)v2).getValue());
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception {
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
+			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
+				return new VBool(((VInt) v1).getVal() < ((VInt)v2).getVal());
+			}
+		}
+		throw new Exception("Illegal arguments to < operator");
 	}
 
 	/**

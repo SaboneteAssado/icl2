@@ -5,6 +5,7 @@ import astNode.EnvironmentAbs;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
+import iValue.VBool;
 import iValue.VInt;
 
 /**
@@ -22,34 +23,20 @@ public class ASTEqGreater implements ASTNode {
 	}
 
 	/**
-	 * Evaluates exps and compares if exp1 is greater or equal to exp2
+	 * Evaluates exps and compares exp1 >= exp2
+	 * @throws Exception 
 	 */
 	@Override
-	public IValue eval(EnvironmentAbs<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception {
 		IValue v1 = expr1.eval(env);
 		if ( v1 instanceof VInt) {
 			IValue v2 = expr2.eval(env);
 			if ( v2 instanceof VInt) {
-				return new IValueBool(((IValueInt) v1).getValue() >= ((IValueInt)v2).getValue());
+				return new VBool(((VInt) v1).getVal() >= ((VInt)v2).getVal());
+			}
+		}
+		throw new Exception("Illegal arguments to >= operator");
 	}
-
-//	/**
-//	 * Checks the type of the >=
-//	 */
-//	@Override
-//	public IType typeCheck(Enviroment<IType> env) {
-//		IType expr1_type = null;
-//		IType expr2_type = null;
-//		try {
-//			expr1_type = expr1.typeCheck(env);
-//			expr2_type = expr2.typeCheck(env);
-//			if (!(expr1_type instanceof ITypeInt && expr2_type instanceof ITypeInt))
-//				throw new InvalidElementsException("Invalid Type of Expressions");
-//		} catch (InvalidElementsException e) {
-//			System.out.println(e.getMessage());
-//		}
-//		return expr1_type;
-//	}
 
 	/**
 	 * Compile >=

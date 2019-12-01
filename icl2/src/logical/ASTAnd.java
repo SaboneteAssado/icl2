@@ -31,14 +31,14 @@ public class ASTAnd implements ASTNode {
 		if ( v1 instanceof VBool ) {
 			IValue v2 = expr2.eval(env);
 			if ( v2 instanceof VBool ) {
-				return new VBool(((VBool) v1).getValue() && ((VBool)v2).getValue());
+				return new VBool(((VBool) v1).getVal() && ((VBool)v2).getVal());
 			}
 		}
 		throw new Exception("Illegal arguments to && operator");
 	}
 
 	/**
-	 * Compile &&.
+	 * Compile &&
 	 */
 	public void compile (CodeAbs code, CompEnvAbs env) {
 		expr1.compile(code, env);

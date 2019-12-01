@@ -1,5 +1,13 @@
 package relational;
 
+import astNode.ASTNode;
+import astNode.EnvironmentAbs;
+import compiler.CodeAbs;
+import compiler.CompEnvAbs;
+import iValue.IValue;
+import iValue.VBool;
+import iValue.VInt;
+
 /**
  * Relation <=
  * @author Miguel Araujo 45699
@@ -8,46 +16,32 @@ package relational;
 public class ASTEqSmaller implements ASTNode {
 
 	private ASTNode expr1, expr2;
-	
-	public ASTESmaller(ASTNode expr1, ASTNode expr2) {
+
+	public ASTEqSmaller(ASTNode expr1, ASTNode expr2) {
 		this.expr1 = expr1;
 		this.expr2 = expr2;
 	}
 
 	/**
-	 * Evaluates the exps and checks if exp1 is smaller or equal to exp2
+	 * Evaluates the exps and  exp1 <= exp2
 	 */
 	@Override
-	public IValue eval(Enviroment<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		IValue v2 = expr2.eval(env);
-		return new IValueBool(((IValueInt) v1).getValue() <= ((IValueInt)v2).getValue());
-	}
-
-	/**
-	 * Checks <=
-	 */
-	@Override
-	public IType typeCheck(Enviroment<IType> env) {
-		IType expr1_type = null;
-		IType expr2_type = null;
-		try {
-			expr1_type = expr1.typeCheck(env);
-			expr2_type = expr2.typeCheck(env);
-			if (!(expr1_type instanceof ITypeInt && expr2_type instanceof ITypeInt))
-				throw new InvalidElementsException("Invalid Type of Expressions.");
-		} catch (InvalidElementsException e) {
-			System.out.println(e.getMessage());
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception {
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
+			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
+				return new VBool(((VInt) v1).getVal() <= ((VInt)v2).getVal());
+			}
 		}
-		return new ITypeBool();
+		throw new Exception("Illegal arguments to <= operator");
 	}
 
 	/**
 	 * Compile <=
 	 */
 	@Override
-	public void compile(CodeAbs code, EnvCompAbs env) {
+	public void compile(CodeAbs code, CompEnvAbs env) {
 		expr1.compile(code, env);
 		expr2.compile(code, env);
 		String L1 = code.getCurrFrame().getNewLabel();

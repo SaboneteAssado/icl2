@@ -1,6 +1,8 @@
 package relational;
 
 import astNode.ASTNode;
+import iValue.IValue;
+import iValue.VInt;
 
 /**
  * Equals relational
@@ -17,38 +19,19 @@ public class ASTEquals {
 	}
 
 	/**
-	 * Evaluates exps and compares if exps are equal
+	 * Evaluates exps and exp1 == exp2
 	 */
 	@Override
-	public IValue eval(Enviroment<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		if (v1 instanceof IValueInt) {
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
 			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
 			IValueBool result =  new IValueBool(((IValueInt) v1).getValue() == ((IValueInt)v2).getValue());
 			return result;
 		}
 		IValue v2 = expr2.eval(env);
 		return new IValueBool(((IValueBool) v1).getValue() == ((IValueBool)v2).getValue());
-	}
-
-	/**
-	 * Checks ==
-	 */
-	@Override
-	public IType typeCheck(Enviroment<IType> env) {
-		IType expr1_type = null;
-		IType expr2_type = null;
-		try {
-			expr1_type = expr1.typeCheck(env);
-			expr2_type = expr2.typeCheck(env);
-			if (!(expr1_type instanceof ITypeInt && expr2_type instanceof ITypeInt))
-				if (!(expr1_type instanceof ITypeBool && expr2_type instanceof ITypeBool))
-					throw new InvalidElementsException("Invalid Type of Expressions.");
-		} catch (InvalidElementsException e) {
-			System.out.println(e.getMessage());
-		}
-		return new ITypeBool();
 	}
 
 	/**

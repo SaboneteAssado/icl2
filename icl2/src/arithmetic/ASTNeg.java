@@ -1,7 +1,7 @@
 package arithmetic;
 
 import astNode.ASTNode;
-import astNode.Environment;
+import astNode.EnvironmentAbs;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
@@ -24,7 +24,7 @@ public class ASTNeg implements ASTNode {
 	 * Evaluates the value and symmetric
 	 */
 	@Override
-	public IValue eval(Environment<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) {
 		IValue v = num.eval(env);
 		return new VInt(-((VInt)v).getVal());
 	}

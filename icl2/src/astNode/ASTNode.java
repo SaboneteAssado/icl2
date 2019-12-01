@@ -16,7 +16,7 @@ public interface ASTNode {
 	 * @param env - Environment of IValues.
 	 * @return the value of the expression.
 	 */
-	IValue eval(Environment<IValue> env);
+	IValue eval(EnvironmentAbs<IValue> env) throws Exception;
 	
 	/**
 	 * copile method for comp

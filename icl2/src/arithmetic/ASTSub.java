@@ -1,7 +1,7 @@
 package arithmetic;
 
 import astNode.ASTNode;
-import astNode.Environment;
+import astNode.EnvironmentAbs;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
@@ -25,7 +25,7 @@ public class ASTSub implements ASTNode {
 	 * Evaluates each expression and subtracts.
 	 */
 	@Override
-	public IValue eval(Environment<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) {
 		IValue v1;
 		v1 = expr1.eval(env);
 			IValue v2 = expr2.eval(env);

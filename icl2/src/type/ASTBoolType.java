@@ -1,6 +1,6 @@
 package type;
 
-public class ASTBoolType {
+public class ASTBoolType implements Type{
 
 	public static final ASTBoolType singleton = new ASTBoolType();
 

@@ -1,6 +1,6 @@
 package type;
 
-public class ASTRefType {
+public class ASTRefType implements Type{
 	
 	private final Type type;
 

@@ -2,7 +2,7 @@ package type;
 
 import java.util.List;
 
-public class ASTFunType {
+public class ASTFunType implements Type{
 
 	private final List<Type> params;
 	private final Type ret;

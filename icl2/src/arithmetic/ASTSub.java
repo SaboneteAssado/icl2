@@ -6,6 +6,8 @@ import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
 import iValue.VInt;
+import type.ASTIntType;
+import type.Type;
 
 /**
  * Class that evaluates subs.
@@ -41,5 +43,15 @@ public class ASTSub implements ASTNode {
 		expr1.compile(code, Cenv);
 		expr2.compile(code, Cenv);
 		code.emit("isub");
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type typeExpr1 = expr1.typeCheck(env);
+		Type typeExpr2 = expr2.typeCheck(env);
+		if (typeExpr2 instanceof ASTIntType && typeExpr1 instanceof ASTIntType) {
+			return typeExpr1;
+		}
+		throw new Exception("Illegal	Types to Subtract");
 	}
 }

@@ -1,5 +1,17 @@
 package relational;
 
+import astNode.ASTNode;
+import astNode.Environment;
+import astNode.EnvironmentAbs;
+import compiler.CodeAbs;
+import compiler.CompEnvAbs;
+import iValue.IValue;
+import iValue.VBool;
+import iValue.VInt;
+import type.ASTBoolType;
+import type.ASTIntType;
+import type.Type;
+
 /**
  * Relation Greater.
  * @author Miguel Araujo 45699
@@ -18,29 +30,34 @@ public class ASTGreater implements ASTNode {
 	 * Evaluates the exps and checks if exp1 is greater than exp2
 	 */
 	@Override
-	public IValue eval(Enviroment<IValue> env) {
-		IValue v1;
-		v1 = expr1.eval(env);
-		IValue v2 = expr2.eval(env);
-		return new IValueBool(((IValueInt) v1).getValue() > ((IValueInt)v2).getValue());
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
+		IValue v1 = expr1.eval(env);
+		if ( v1 instanceof VInt) {
+			IValue v2 = expr2.eval(env);
+			if ( v2 instanceof VInt) {
+				return new VBool(((VInt) v1).getVal() > ((VInt)v2).getVal());
+			}
+		}
+		throw new Exception("Illegal arguments to > operator");
+	}
 	}
 
 	/**
 	 * Checks >
 	 */
 	@Override
-	public IType typeCheck(Enviroment<IType> env) {
-		IType expr1_type = null;
-		IType expr2_type = null;
+	public Type typeCheck(Environment<Type> env) {
+		Type expr1_type = null;
+		Type expr2_type = null;
 		try {
 			expr1_type = expr1.typeCheck(env);
 			expr2_type = expr2.typeCheck(env);
-			if (!(expr1_type instanceof ITypeInt && expr2_type instanceof ITypeInt))
-				throw new InvalidElementsException("Invalid Type of Expressions.");
-		} catch (InvalidElementsException e) {
+			if (!(expr1_type instanceof ASTIntType && expr2_type instanceof ASTIntType))
+				throw new Exception("Invalid Type of Expressions.");
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return new ITypeBool();
+		return new ASTBoolType();
 	}
 
 	/**

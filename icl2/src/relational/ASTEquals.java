@@ -1,7 +1,11 @@
 package relational;
 
 import astNode.ASTNode;
+import astNode.EnvironmentAbs;
+import compiler.CodeAbs;
+import compiler.CompEnvAbs;
 import iValue.IValue;
+import iValue.VBool;
 import iValue.VInt;
 
 /**
@@ -21,23 +25,23 @@ public class ASTEquals {
 	/**
 	 * Evaluates exps and exp1 == exp2
 	 */
-	@Override
 	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
 		IValue v1 = expr1.eval(env);
 		if ( v1 instanceof VInt) {
 			IValue v2 = expr2.eval(env);
 			if ( v2 instanceof VInt) {
-			IValueBool result =  new IValueBool(((IValueInt) v1).getValue() == ((IValueInt)v2).getValue());
-			return result;
+				VBool result =  new VBool(((VInt) v1).getVal() == ((VInt)v2).getVal());
+				return result;
+			}
+			v2 = expr2.eval(env);
+			return new VBool(((VBool) v1).getVal() == ((VBool)v2).getVal());
 		}
-		IValue v2 = expr2.eval(env);
-		return new IValueBool(((IValueBool) v1).getValue() == ((IValueBool)v2).getValue());
+		throw new Exception("Illegal arguments to == operator");
 	}
 
 	/**
 	 * Compile ==
 	 */
-	@Override
 	public void compile(CodeAbs code, CompEnvAbs env) {
 		expr1.compile(code, env);
 		expr2.compile(code, env);

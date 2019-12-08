@@ -2,11 +2,15 @@ package astNode;
 
 import java.util.List;
 
+import atsnode.Enviroment;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import compiler.Frame;
 import compiler.FrameAbs;
+import exceptions.DontFindException;
 import iValue.IValue;
+import itype.IType;
+import type.Type;
 
 /**
  * Class that represents vars
@@ -64,5 +68,18 @@ public class ASTId implements ASTNode{
 			frameid = next;
 		}
 		code.emit("getfield " + frameid + "/x" + offSet + " " + frameid);
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) {
+		Type v = null;
+		try {
+			v = env.find(id);
+			this.type = v;
+			System.out.println("1 " + type);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return v;
 	}
 }

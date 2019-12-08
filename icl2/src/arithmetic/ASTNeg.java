@@ -6,6 +6,8 @@ import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
 import iValue.VInt;
+import type.ASTIntType;
+import type.Type;
 
 /**
  * Class to evaluate the symmetric value. 
@@ -35,5 +37,14 @@ public class ASTNeg implements ASTNode {
 	public void compile(CodeAbs code, CompEnvAbs Cenv) {
 		num.compile(code, Cenv);
 		code.emit("ineg");
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type typeExpr1 = num.typeCheck(env);
+		if (typeExpr1 instanceof ASTIntType) {
+			return typeExpr1;
+		}
+		throw new Exception("Illegal	Types to Negation");
 	}
 }

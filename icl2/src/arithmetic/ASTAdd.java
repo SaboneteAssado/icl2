@@ -12,11 +12,11 @@ import iValue.VInt;
  * @author Miguel Araujo 45699
  *
  */
-public class ASTPlus implements ASTNode {
+public class ASTAdd implements ASTNode {
 
 	private ASTNode expr1, expr2;
 
-	public ASTPlus(ASTNode expr1, ASTNode expr2) {
+	public ASTAdd(ASTNode expr1, ASTNode expr2) {
 		this.expr1 = expr1;
 		this.expr2 = expr2;
 	}

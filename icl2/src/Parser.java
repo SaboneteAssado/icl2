@@ -76,7 +76,7 @@ public class Parser implements ParserConstants {
       }
       t2 = Term();
                    if (op.kind == PLUS)
-                         t1 = new ASTPlus(t1,t2);
+                         t1 = new ASTAdd(t1,t2);
                    else  t1 = new ASTSub(t1,t2);
     }
        {if (true) return t1;}

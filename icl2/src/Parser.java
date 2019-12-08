@@ -13,7 +13,7 @@ public class Parser implements ParserConstants {
   public static void main(String args[]) {
     Parser parser = new Parser(System.in);
     ASTNode exp;
-    Environment<IValue> env = new Environment<IValue>(null);
+    EnvironmentAbs<IValue> env = new Environment<IValue>(null);
 
         CompEnvAbs envComp = new CompEnv();
         CodeAbs c = new Code();

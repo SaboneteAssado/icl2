@@ -25,7 +25,7 @@ public class ASTLet implements ASTNode{
 	}
 	
 	@Override
-	public IValue eval(Environment<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) {
 		env = env.beginScope();
 		
 		Set<ASTNode> keys = nodeVals.keySet();

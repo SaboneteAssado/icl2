@@ -8,17 +8,17 @@ import java.util.Map;
  * @author Miguel Araujo 45699 
  *
  */
-public class Environment<E> {
+public class Environment<E> implements EnvironmentAbs<E> {
 
 	/**
 	 * An environment needs to store, besides its parent environment, the list of associations
 	 * between identifiers and values. 
 	 */
-	private Environment<E> prev;
+	private EnvironmentAbs<E> prev;
 
 	private Map<String, E> nodeVals;
 
-	public Environment(Environment<E> prev) {
+	public Environment(EnvironmentAbs<E> prev) {
 		this.prev = prev;
 		nodeVals = new HashMap<String, E>();
 	}
@@ -27,7 +27,8 @@ public class Environment<E> {
 	 * Begins a new scope of environment that is the child of the current environment.
 	 * @return the child of the current environment.
 	 */
-	public Environment<E> beginScope() {
+	@Override
+	public EnvironmentAbs<E> beginScope() {
 		return new Environment<E>(this);
 	}
 
@@ -35,7 +36,8 @@ public class Environment<E> {
 	 * Ends this scope of environment by going to its parent environment.
 	 * @return the parent environment.
 	 */
-	public Environment<E> endScope() {
+	@Override
+	public EnvironmentAbs<E> endScope() {
 		return prev;
 	}
 
@@ -45,6 +47,7 @@ public class Environment<E> {
 	 * @param val
 	 * @throws Exception 
 	 */
+	@Override
 	public void assoc(ASTId id, E val) throws Exception {
 		String identifier = id.getId();
 		E envVal = findId(identifier);
@@ -61,6 +64,7 @@ public class Environment<E> {
 	 * @param id.
 	 * @return val.
 	 */
+	@Override
 	public E findId(String id){
 		E val = nodeVals.get(id);
 		if ( val != null)

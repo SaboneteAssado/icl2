@@ -26,7 +26,7 @@ public class ASTId implements ASTNode{
 	 * @param env
 	 */
 	@Override
-	public IValue eval(Environment<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) {
 		IValue v = env.findId(id);
 		return v;
 	}

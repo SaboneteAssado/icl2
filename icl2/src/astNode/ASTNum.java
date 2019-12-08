@@ -1,6 +1,5 @@
-package arithmetic;
-import astNode.ASTNode;
-import astNode.Environment;
+package astNode;
+
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
@@ -18,7 +17,7 @@ public class ASTNum implements ASTNode{
 	 * Evaluates the value and symmetric
 	 */
 	@Override
-	public IValue eval(Environment<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) {
 		return num;
 	}
 

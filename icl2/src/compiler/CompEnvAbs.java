@@ -1,41 +1,58 @@
 package compiler;
 
+import type.Type;
+
 public interface CompEnvAbs {
 
 	/**
-	 * Add var to the comp env
-	 * @param id of var
-	 * @param offSet in frame
+	 * Adds var to comp env
+	 * @param id 
+	 * @param type 
+	 * @param offset
 	 * @param level
 	 */
-	void addVar(String id, int offSet, int level);
+	void addVar(String id, Type type, int offset, int level);
 
 	/**
-	 * 
+	 * Get offset
 	 * @param id
-	 * @return int OffSet
+	 * @return offset.
 	 */
-	int getOffSet(String id);
+	int getOffset(String id);
 
 	/**
-	 * 
+	 * Set offset
 	 * @param id
-	 * @return int level
+	 * @param offset
+	 */
+	void setOffset(String id, int offset);
+
+	/**
+	 * Get level
+	 * @param id
+	 * @return level
 	 */
 	int getLevel(String id);
 
 	/**
-	 * 
-	 * @param id
-	 * @param offSet
-	 */
-	void setOffSet(String id, int offSet);
-
-	/**
-	 * 
+	 * Set level
 	 * @param id
 	 * @param level
 	 */
 	void setLevel(String id, int level);
+
+	/**
+	 * Get type
+	 * @param id
+	 * @return type
+	 */
+	Type getType(String id);
+
+	/**
+	 * Set type
+	 * @param id
+	 * @param type
+	 */
+	void setType(String id, Type type);
 
 }

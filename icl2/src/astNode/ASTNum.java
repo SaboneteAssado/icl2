@@ -15,7 +15,7 @@ public class ASTNum implements ASTNode{
 
 	public ASTNum(int num) {
 		this.num = new VInt(num);
-		type = new ASTIntType().singleton;
+		type = new ASTIntType();
 	}
 
 	/**

@@ -1,15 +1,9 @@
 package astNode;
 
-import java.util.List;
-
-import atsnode.Enviroment;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
-import compiler.Frame;
 import compiler.FrameAbs;
-import exceptions.DontFindException;
 import iValue.IValue;
-import itype.IType;
 import type.Type;
 
 /**
@@ -20,18 +14,21 @@ import type.Type;
 public class ASTId implements ASTNode{
 
 	private String id;
+	private Type type;
 
-	public ASTId ( String id ) {
+	public ASTId (String id) {
 		this.id = id;
+		this.type = null;
 	}
 
 	/**
 	 * gets the id from env
 	 * @param env
+	 * @throws Exception 
 	 */
 	@Override
-	public IValue eval(EnvironmentAbs<IValue> env) {
-		IValue v = env.findId(id);
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception {
+		IValue v = env.find(id);
 		return v;
 	}
 

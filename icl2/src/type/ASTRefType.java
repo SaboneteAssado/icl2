@@ -1,39 +1,34 @@
 package type;
 
-public class ASTRefType implements Type{
-	
-	private final Type type;
+import type.Type;
 
+public class ASTRefType<E> implements Type {
+
+	private static final String REFERENCE = "ref ";
+	
+	private Type type;
+		
 	public ASTRefType(Type type) {
 		this.type = type;
 	}
+	
+	@Override
+	public void show() {
+		System.out.println(REFERENCE + type.getTypeString());
+	}
 
-	public Type nested_type() {
+	public Type getRefType() {
 		return type;
 	}
-
+	
 	@Override
-	public String toString() {
-		return "ref(" + type.toString() + ")";
+	public String getTypeString() {
+		return REFERENCE + type.getTypeString();
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		if(other == this) {
-			return true;
-		}
-
-		if(other == null || !(other instanceof ASTRefType)) {
-			return false;
-		}
-
-		ASTRefType o = (ASTRefType) other;
-
-		return this.nested_type().equals(o.nested_type());
+	public String getTypeToCompile() {
+		return "Lref_" + type.getTypeToCompile();
 	}
 
-	@Override
-	public int hashCode() {
-		return this.nested_type().hashCode() * 2 - 1;
-	}
 }

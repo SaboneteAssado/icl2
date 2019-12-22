@@ -10,7 +10,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Class that evaluates muls.
+ * Class that evals multiplications
  * @author Miguel Araujo
  *
  */
@@ -24,7 +24,7 @@ public class ASTMul implements ASTNode {
 	}
 
 	/**
-	 * Evaluates exps and exp1 * exp2
+	 * Evaluates exps
 	 */
 	@Override
 	public IValue eval(EnvironmentAbs<IValue> env)throws Exception {
@@ -52,6 +52,6 @@ public class ASTMul implements ASTNode {
 		if (typeExpr2 instanceof ASTIntType && typeExpr1 instanceof ASTIntType) {
 			return typeExpr1;
 		}
-		throw new Exception("Illegal	Types to Multiply");
+		throw new Exception("Illegal Types to Multiply");
 	}
 }

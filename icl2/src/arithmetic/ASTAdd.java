@@ -10,7 +10,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Class that evaluates additions.
+ * Class that evals addition
  * @author Miguel Araujo 45699
  *
  */

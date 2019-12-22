@@ -10,7 +10,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Class that evaluates subs.
+ * Class that evaluates subtractions
  * @author Miguel Araujo 45699
  *
  */
@@ -24,7 +24,7 @@ public class ASTSub implements ASTNode {
 	}
 
 	/**
-	 * Evaluates exps exp1 - exp2.
+	 * Evaluates exps
 	 */
 	@Override
 	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{
@@ -52,6 +52,6 @@ public class ASTSub implements ASTNode {
 		if (typeExpr2 instanceof ASTIntType && typeExpr1 instanceof ASTIntType) {
 			return typeExpr1;
 		}
-		throw new Exception("Illegal	Types to Subtract");
+		throw new Exception("Illegal Types to Subtract");
 	}
 }

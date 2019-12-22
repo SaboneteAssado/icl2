@@ -1,4 +1,4 @@
-package atsNode;
+package astNode;
 
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
@@ -22,12 +22,11 @@ public class ASTAssign implements ASTNode {
 	}
 
 	/**
-	 * Verifies if an expression is a memory reference. 
-	 * If it is, then , before associating with the id to the expression, gets 
-	 * the value saved in the cell which the reference points to.
+	 * Verifies if an expression is a memory ref
+	 * @throws Exception 
 	 */
 	@Override
-	public IValue eval(EnvironmentAbs<IValue> env) {
+	public IValue eval(EnvironmentAbs<IValue> env) throws Exception {
 		IValue v1 = expr.eval(env);
 		if (memory_ref instanceof ASTId) {
 			try {

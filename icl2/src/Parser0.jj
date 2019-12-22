@@ -14,8 +14,8 @@ public class Parser {
   public static void main(String args[]) {
     Parser parser = new Parser(System.in);
     ASTNode exp;
-    Environment<IValue> env = new Environment<IValue>(null);
-
+    Environment<IValue> valEnv = new Environment<IValue>(null);
+	Enviroment<Type> typeEnv = new Enviroment<Type>(null);
 	CompEnvAbs envComp = new CompEnv();
 	CodeAbs c = new Code();
 
@@ -23,6 +23,7 @@ public class Parser {
     try {
     exp = parser.Start();
     
+    /*
     try {
     exp.compile(c, envComp);
     } catch (Exception e){ System.out.println("compile error");}
@@ -31,6 +32,7 @@ public class Parser {
     c.dump("heyyy");
     } catch (Exception e){ System.out.println("dump error");}
     exp.eval(env).show();
+    */
     
     System.out.println();
     } catch (Exception e) {
@@ -49,37 +51,80 @@ SKIP :
   " "
 | "\t"
 | "\r"
+| "\n"
 }
 
 TOKEN :
 {
-  < Num: (["0"-"9"]) + >
+   <Num: (["0"-"9"]) + >
   |
-  < PLUS : "+" >
+  <PLUS : "+" >
   |
-  < MINUS : "-">
+  <MINUS : "-">
   |
-  < TIMES : "*">
+  <TIMES : "*">
   |
-  < DIV : "/">
+  <DIV : "/">
   |
-  < LPAR : "(" >
+  <LPAR : "(" >
   |
-  < RPAR : ")" >
+  <RPAR : ")" >
   |
-  < EL: "\n" >
+  <LET: "let">
   |
-  < LET: "let" >
+  <EQUALS: "=">
   |
-  < IN: "in" >
+  <EL: ";;">
   |
-  < END: "end" >
+  <END: "end">
   |
-  < SEQ: ";" >
+  <IN: "in">
   |
-  < EQUALS: "=" >
+  <FUN: "fun">
   |
-  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+  <ASSOC: "->">
+  |
+  <ASSIGN: ":=">
+  |
+  <SEQ: ";">
+  |
+  <IF: "if">
+  |
+  <THEN: "then">
+  |
+  <ELSE: "else">
+  |
+  <WHILE: "while">
+  |
+  <DO: "do">
+  |
+  <NEW: "new">
+  |
+  <AND: "&&">
+  |
+  <OR: "||">
+  |
+  <NOT: "~">
+  |
+  <GEQUALS: ">=">
+  |
+  <SEQUALS: "<=">
+  |
+  <GREATER: ">">
+  |
+  <SMALLER: "<">
+  |
+  <EEQUALS: "==">
+  |
+  <COMMA: ",">
+  |
+  <VALUE: "!">
+  |
+  <TYPE: ":">
+  |
+  <PRINT: "println">
+  |
+  <Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
   
 }
 
@@ -125,19 +170,133 @@ ASTNode Fact() :
 { 
   Token n; 
   ASTNode t, t1, t2;
-  int num = 0;
+  int num;
   char id;
+  IType type, type1;
+  ITypeClosure t;
   Map<ASTNode, ASTNode> nodeVals = new HashMap<ASTNode, ASTNode>();
+  List<ASTNode> listIds = new ArrayList<ASTNode>();
+  List<Type> listTypes = new ArrayList<Type>();
+  List<Type> listTypesAux = new ArrayList<Type>();
+  List<ASTNode> list = new ArrayList<ASTNode>();
  }
 {
    ( 
-   		n=<Num> { t = new ASTNum(Integer.parseInt(n.image)); return t; } 
-   	| <LPAR> t=Exp() <RPAR> { return t; }
+   <NOT> t1 = Exp() {return new ASTNot(t1);}
+   
+   	| n=<Num> { t = new ASTNum(Integer.parseInt(n.image)); return t; } 
+   	
+   	| <LPAR> <LPAR> t1 = Seq() <RPAR> ((<LPAR> t2 = Seq() {list.add(t2);} (<COMMA> t2 = Seq() {list.add(t2);})* <RPAR> {t1 = new ASTApply(t1 ,list);})
+ 		| <ASSIGN> t2 = ExpBool(){t1 = new ASTAssign(t1, t2);} )* {return t1;}
+ 		
+ 	| <LET> (n = <Id> <TYPE> {listIds.add(new ASTId(n.image));}
+  		(type = Types() {listTypes.add(type);}
+  		|<LPAR> type = Types() {listTypesAux.add(type);} (<COMMA> type = Types() {listTypesAux.add(type);})* <RPAR>
+  		type1 = Types() {t = new ASTClosureType(n.image,listTypesAux, type1); listTypes.add(t);})
+  		<EQUALS> t1 = Seq() {list.add(t1);})* <IN> t2 = Seq() <END>  {return new ASTLet(listIds, listTypes, list, t2);}
+  				
+ 	
+ 	| <FUN> (n = <Id> <TYPE> type = Types() {list.add(new ASTId(n.image)); listTypes.add(type);}
+  			(<COMMA> n = <Id> <TYPE> type = Types() {list.add(new ASTId(n.image)); listTypes.add(type);})* )?
+  			<ASSOC> t1 = Seq() <END> { return new ASTFun(list, listTypes, t1); }
+ 	
    	| <MINUS> t = Fact() {return new ASTNeg(t);}
+   	
    	| <LET> (t = Exp() <EQUALS> t1 = Exp() {nodeVals.put(t,t1);})+ ((<SEQ>) t = Exp() <EQUALS> t1 = Exp() {nodeVals.put(t,t1);})* <IN> t2 = Exp() <END> {return new ASTLet(nodeVals,t2);}
-   	| n = <Id> {return new ASTId(n.image);}
+   	
+   	| <MINUS> (<MINUS> {num = num + 1;})* t1 = Seq() { return new ASTNeg(t1, num); }
+  	
+  	| <NEW> t1 = ExpBool() {t1 = new ASTNew(t1);} (<ASSIGN> t2 = ExpBool(){t1 = new ASTAssign(t1, t2);} )* {return t1;}
+  	
+  	| <IF> t1 = Seq() <THEN> t2 = Seq() <ELSE> t3 = Seq() <END> {return new ASTIf(t1, t2, t3);}
+  	
+  	| <WHILE> t1 = Seq() <DO> t2 = Seq() <END> {return new ASTWhile(t1, t2);}
+  	
+  	| <VALUE> t2 = Fact() {return new ASTDeref(t2);}
+  	
+  	| <PRINT> t1 = Seq() {return new ASTPrint(t1);}
+  	
+  	| n = <Id>  { if (n.image.equalsIgnoreCase("true")) {
+  					t1 = new ASTBool(true);
+  				} else if (n.image.equalsIgnoreCase("false")) {
+  					t1 = new ASTBool(false);
+  				} else {
+  					t1 = new ASTId(n.image);
+  				 }
+			   } {return t1;}
    )
    
+}
+
+ASTNode Seq() :
+{
+	ASTNode t1, t2;
+	List<ASTNode> list = new ArrayList<ASTNode>();
+}
+{
+	t1 = ExpBool() {list.add(t1);} (<SEQ> t2 = ExpBool() {list.add(t2);})* {return new ASTSeq(list);}
+}
+
+ASTNode ExpBool():
+{
+	ASTNode t1, t2;
+	List<ASTNode> list = new ArrayList<ASTNode>();
+}
+{
+	t2 = ExpRel() (<OR> (t1 = Exp() {t2 = new ASTOr(t2, t1);})
+  					|
+  					<AND> (t1 = Exp() {t2 = new ASTAnd(t2, t1);}))*
+	{return t2;}
+}
+
+ASTNode ExpRel():
+{
+	Token num2;
+	ASTNode t1, t2;
+	List<ASTNode> list = new ArrayList<ASTNode>();
+}
+{
+	t2 = Exp() (
+	<GEQUALS> (t1 = Exp() {t2 = new ASTEqGreater(t2, t1);})
+  	|
+  	<SEQUALS> (t1 = Exp() {t2 = new ASTEqSmaller(t2, t1);})
+  	|
+  	<GREATER> (t1 = Exp() {t2 = new ASTGreater(t2, t1);})
+  	|
+  	<SMALLER> (t1 = Exp() {t2 = new ASTSmaller(t2, t1);})
+  	|
+ 	<EEQUALS> (t1 = Exp() {t2 = new ASTEquals(t2, t1);})
+ 	)?
+ 	{return t2;}
+}
+
+IType Types() :
+{
+Token n;
+Type type = null, type1;
+}
+{
+	n = <Id> {  if (n.image.equalsIgnoreCase("bool")) {
+					type = new ASTBoolType();
+				} else if (n.image.equalsIgnoreCase("int")) {
+					type = new ASTIntType();
+				} else if (n.image.equalsIgnoreCase("ref")) {
+					type1 = Types();
+					type = new ASTRefType(type1);
+				}
+			}
+		    {return type;}
+}
+
+ASTNode ExpInitId():
+{
+	ASTNode t1, t2;
+	List<ASTNode> list = new ArrayList<ASTNode>();
+}
+{
+	t2 = Fact() (<LPAR> (t1 = Seq() {list.add(t1);})? (<COMMA> t1 = Seq() {list.add(t1);})* <RPAR> { t2 = new ASTApply(t2, list); }
+		| <ASSIGN> (t1 = ExpBool() { t2 = new ASTAssign(t2, t1); }))*
+	{ return t2; }
 }
 
 

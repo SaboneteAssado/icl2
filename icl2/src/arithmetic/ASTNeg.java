@@ -10,7 +10,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Class to evaluate the symmetric value. 
+ * Class that evals the symmetric 
  * @author Miguel Araujo 45699
  *
  */
@@ -45,6 +45,6 @@ public class ASTNeg implements ASTNode {
 		if (typeExpr1 instanceof ASTIntType) {
 			return typeExpr1;
 		}
-		throw new Exception("Illegal	Types to Negation");
+		throw new Exception("Illegal Types to Negation");
 	}
 }

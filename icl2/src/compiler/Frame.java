@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Class frame.
+ * Class frame
  * @author Miguel Araujo 45699
  *
  */

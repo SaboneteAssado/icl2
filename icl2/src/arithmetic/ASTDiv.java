@@ -10,7 +10,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Class to evaluate divisions.
+ * Class that evals divisions
  * @author Miguel Araujo 45699
  *
  */
@@ -24,7 +24,7 @@ public class ASTDiv implements ASTNode {
 	}
 
 	/**
-	 * Evaluates exps and exp1/exp2.
+	 * Evaluates exp1/exp2.
 	 */
 	@Override
 	public IValue eval(EnvironmentAbs<IValue> env) throws Exception{

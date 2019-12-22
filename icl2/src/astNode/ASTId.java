@@ -50,33 +50,33 @@ public class ASTId implements ASTNode{
 
 	@Override
 	public void compile(CodeAbs code, CompEnvAbs Cenv) {
-		FrameAbs frame = code.getCurrFrame();
-		String frameid = frame.getFrameName();
-		
-		Cenv.addVar(id, code.getCurrFrame().getNumLabel(), code.getCurrFrameNumber());
-		
-		int level = Cenv.getLevel(id);
-		int offSet = Cenv.getOffSet(id);
-
-		code.emit("aload 0");
-		for( int i = 0; i <= level; i++) {
-			String next = code.getFrame((code.getCurrFrameNumber() - (i+1))).getFrameName();
-			code.emit("getfield " + frameid + "/sl L" + next);
-			frameid = next;
-		}
-		code.emit("getfield " + frameid + "/x" + offSet + " " + frameid);
-	}
-
-	@Override
-	public Type typeCheck(EnvironmentAbs<Type> env) {
-		Type v = null;
-		try {
-			v = env.find(id);
-			this.type = v;
-			System.out.println("1 " + type);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return v;
-	}
+//		FrameAbs frame = code.getCurrFrame();
+//		String frameid = frame.getFrameName();
+//		
+//		Cenv.addVar(id, code.getCurrFrame().getNumLabel(), code.getCurrFrameNumber());
+//		
+//		int level = Cenv.getLevel(id);
+//		int offSet = Cenv.getOffSet(id);
+//
+//		code.emit("aload 0");
+//		for( int i = 0; i <= level; i++) {
+//			String next = code.getFrame((code.getCurrFrameNumber() - (i+1))).getFrameName();
+//			code.emit("getfield " + frameid + "/sl L" + next);
+//			frameid = next;
+//		}
+//		code.emit("getfield " + frameid + "/x" + offSet + " " + frameid);
+//	}
+//
+//	@Override
+//	public Type typeCheck(EnvironmentAbs<Type> env) {
+//		Type v = null;
+//		try {
+//			v = env.find(id);
+//			this.type = v;
+//			System.out.println("1 " + type);
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return v;
+//	}
 }

@@ -12,7 +12,7 @@ import type.ASTIntType;
 import type.Type;
 
 /**
- * Relation Greater.
+ * Relation greater
  * @author Miguel Araujo 45699
  *
  */
@@ -38,7 +38,6 @@ public class ASTGreater implements ASTNode {
 			}
 		}
 		throw new Exception("Illegal arguments to > operator");
-	}
 	}
 
 	/**

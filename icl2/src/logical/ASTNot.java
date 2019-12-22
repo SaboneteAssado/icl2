@@ -6,6 +6,8 @@ import compiler.CodeAbs;
 import compiler.CompEnvAbs;
 import iValue.IValue;
 import iValue.VInt;
+import type.ASTBoolType;
+import type.Type;
 import iValue.VBool;
 
 /**
@@ -47,5 +49,14 @@ public class ASTNot implements ASTNode {
 		code.emit(label + ": ");
 		code.emit("sipush 1");
 		code.emit(label2 + ":");
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type expr1_type = null;
+		expr1_type = expr1.typeCheck(env);
+		if (!(expr1_type instanceof ASTBoolType))
+			throw new Exception("Invalid Type of expression.");
+		return expr1_type;
 	}
 }

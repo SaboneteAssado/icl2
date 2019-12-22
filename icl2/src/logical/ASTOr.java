@@ -2,10 +2,16 @@ package logical;
 
 import astNode.ASTNode;
 import astNode.EnvironmentAbs;
+import atsnode.Enviroment;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
+import exceptions.InvalidElementsException;
 import iValue.IValue;
 import iValue.VInt;
+import itype.IType;
+import itype.ITypeBool;
+import type.ASTBoolType;
+import type.Type;
 import iValue.VBool;
 
 /**
@@ -16,7 +22,7 @@ import iValue.VBool;
 public class ASTOr implements ASTNode {
 
 	private ASTNode expr1, expr2;
-	
+
 
 	public ASTOr(ASTNode expr1, ASTNode expr2) {
 		this.expr1 = expr1;
@@ -37,7 +43,7 @@ public class ASTOr implements ASTNode {
 		}
 		throw new Exception("Illegal arguments to || operator");
 	}
-	
+
 	/**
 	 * Compile ||
 	 */
@@ -47,4 +53,14 @@ public class ASTOr implements ASTNode {
 		code.emit("ior");
 	}
 
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type expr1_type = null;
+		Type expr2_type = null;
+		expr1_type = expr1.typeCheck(env);
+		expr2_type = expr2.typeCheck(env);
+		if (!(expr1_type instanceof ASTBoolType && expr2_type instanceof ASTBoolType))
+			throw new Exception("Invalid Type of Expressions.") ;
+		return expr1_type;
+	}
 }

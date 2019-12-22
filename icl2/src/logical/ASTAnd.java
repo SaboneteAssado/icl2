@@ -2,10 +2,16 @@ package logical;
 
 import astNode.ASTNode;
 import astNode.EnvironmentAbs;
+import atsnode.Enviroment;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
+import exceptions.InvalidElementsException;
 import iValue.IValue;
 import iValue.VBool;
+import itype.IType;
+import itype.ITypeBool;
+import type.ASTBoolType;
+import type.Type;
 
 /**
  * Logical && 
@@ -46,4 +52,14 @@ public class ASTAnd implements ASTNode {
 		code.emit("iand");
 	}
 
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type expr1_type = null;
+		Type expr2_type = null;
+			expr1_type = expr1.typeCheck(env);
+			expr2_type = expr2.typeCheck(env);
+			if (!(expr1_type instanceof ASTBoolType && expr2_type instanceof ASTBoolType))
+				throw new Exception("Invalid Type for expressions");
+			return expr2_type;
+	}
 }

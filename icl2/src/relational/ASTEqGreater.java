@@ -7,6 +7,8 @@ import compiler.CompEnvAbs;
 import iValue.IValue;
 import iValue.VBool;
 import iValue.VInt;
+import type.ASTIntType;
+import type.Type;
 
 /**
  * Relation >=
@@ -53,5 +55,16 @@ public class ASTEqGreater implements ASTNode {
 		code.emit(L1 + ": ");
 		code.emit("sipush 1");
 		code.emit(L2 + ": ");
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type expr1_type = null;
+		Type expr2_type = null;
+		expr1_type = expr1.typeCheck(env);
+		expr2_type = expr2.typeCheck(env);
+		if (!(expr1_type instanceof ASTIntType && expr2_type instanceof ASTIntType))
+			throw new Exception("Invalid Type of Expressions");
+		return expr1_type;
 	}
 }

@@ -2,11 +2,19 @@ package relational;
 
 import astNode.ASTNode;
 import astNode.EnvironmentAbs;
+import atsnode.Enviroment;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
+import exceptions.InvalidElementsException;
 import iValue.IValue;
 import iValue.VBool;
 import iValue.VInt;
+import itype.IType;
+import itype.ITypeBool;
+import itype.ITypeInt;
+import type.ASTBoolType;
+import type.ASTIntType;
+import type.Type;
 
 /**
  * Relation <
@@ -16,7 +24,7 @@ import iValue.VInt;
 public class ASTSmaller implements ASTNode {
 
 	private ASTNode expr1, expr2;
-	
+
 	public ASTSmaller(ASTNode expr1, ASTNode expr2) {
 		this.expr1 = expr1;
 		this.expr2 = expr2;
@@ -53,5 +61,16 @@ public class ASTSmaller implements ASTNode {
 		code.emit(L1 + ": ");
 		code.emit("sipush 1");
 		code.emit(L2 + ": ");		
+	}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type expr1_type = null;
+		Type expr2_type = null;
+		expr1_type = expr1.typeCheck(env);
+		expr2_type = expr2.typeCheck(env);
+		if (!(expr1_type instanceof ASTIntType && expr2_type instanceof ASTIntType))
+			throw new Exception("Invalid Type of Expressions.");
+		return new ASTBoolType();
 	}
 }

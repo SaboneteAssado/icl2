@@ -2,23 +2,24 @@ package type;
 
 public class ASTIntType implements Type {
 
-	public static final ASTIntType singleton = new ASTIntType();
-
-	private ASTIntType() {}
-
-	@Override
-	public String toString() {
-		return "IntType";
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		return other == this;
-	}
-
-	@Override
-	public int hashCode() {
-		return System.identityHashCode(this);
+	private static final String INTEGER = "int";
+	
+	public ASTIntType() {
 	}
 	
+	@Override
+	public void show() {
+		System.out.println(INTEGER);
+	}
+
+	@Override
+	public String getTypeString() {
+		return INTEGER;
+	}
+
+	@Override
+	public String getTypeToCompile() {
+		return "I";
+	}
+
 }

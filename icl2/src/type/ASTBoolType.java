@@ -1,24 +1,25 @@
 package type;
 
 public class ASTBoolType implements Type{
-
-	public static final ASTBoolType singleton = new ASTBoolType();
-
-	private ASTBoolType() {}
-
-	@Override
-	public String toString() {
-		return "BoolType";
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		return other == this;
-	}
-
-	@Override
-	public int hashCode() {
-		return System.identityHashCode(this);
-	}
 	
+	private static final String BOOLEAN = "bool";
+
+	public ASTBoolType() {
+	}
+
+	@Override
+	public void show() {
+		System.out.println(BOOLEAN);
+	}
+
+	@Override
+	public String getTypeString() {
+		return BOOLEAN;
+	}
+
+	@Override
+	public String getTypeToCompile() {
+		return "I";
+	}
+
 }

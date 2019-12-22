@@ -2,7 +2,6 @@ package astNode;
 
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
-import compiler.FrameAbs;
 import iValue.IValue;
 import type.Type;
 
@@ -79,4 +78,14 @@ public class ASTId implements ASTNode{
 //		}
 //		return v;
 //	}
+}
+
+	@Override
+	public Type typeCheck(EnvironmentAbs<Type> env) throws Exception {
+		Type v = null;
+			v = env.find(id);
+			this.type = v;
+			System.out.println("1 " + type);
+		return v;
+	}
 }

@@ -7,7 +7,7 @@ import astNode.EnvironmentAbs;
 
 /**
  * Closure
- * @author Miguel
+ * @author 45699
  *
  */
 public class VClosure implements IValue {

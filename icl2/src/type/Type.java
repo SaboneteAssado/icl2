@@ -1,8 +1,20 @@
 package type;
 
 public interface Type {
-	
-	public abstract boolean equals(Object other);
 
-	public abstract int hashCode();
+	/**
+	 * Shows type
+	 */
+	void show();
+	
+	/**
+	 * @return type to String
+	 */
+	String getTypeString();
+	
+	/**
+	 * @return comp type
+	 */
+	String getTypeToCompile();
+	
 }

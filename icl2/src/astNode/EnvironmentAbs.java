@@ -3,30 +3,31 @@ package astNode;
 public interface EnvironmentAbs<E> {
 
 	/**
-	 * Begins a new scope of environment that is the child of the current environment.
-	 * @return the child of the current environment.
+	 * Begins a new scope of env
+	 * @return the child of the current env
 	 */
 	EnvironmentAbs<E> beginScope();
 
 	/**
-	 * Ends this scope of environment by going to its parent environment.
-	 * @return the parent environment.
+	 * Ends this scope of env
+	 * @return the parent env
 	 */
 	EnvironmentAbs<E> endScope();
 
 	/**
-	 * Associates a identifier with a value.
+	 * Associates
 	 * @param id
-	 * @param val
+	 * @param value
 	 * @throws Exception 
 	 */
-	void assoc(ASTId id, E val) throws Exception;
+	void assoc(String id, E value) throws Exception;
 
 	/**
-	 * Searches for an identifier in an environment.
-	 * @param id.
-	 * @return val.
+	 * Searches for an id in the current env and parent envs
+	 * @param id
+	 * @return value
+	 * @throws Exception 
 	 */
-	E findId(String id);
+	E find(String id) throws Exception;
 
 }

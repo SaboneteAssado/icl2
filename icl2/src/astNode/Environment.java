@@ -1,31 +1,33 @@
 package astNode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import iValue.IValue;
+import iValue.VRef;
+import type.ASTRefType;
 
 /**
- * Environment class
- * @author Miguel Araujo 45699 
+ * Environment
+ * @author 45699
  *
  */
 public class Environment<E> implements EnvironmentAbs<E> {
 
-	/**
-	 * An environment needs to store, besides its parent environment, the list of associations
-	 * between identifiers and values. 
-	 */
 	private EnvironmentAbs<E> prev;
 
-	private Map<String, E> nodeVals;
+	private List<ASTId> ids;
+	private List<E> values;
 
 	public Environment(EnvironmentAbs<E> prev) {
 		this.prev = prev;
-		nodeVals = new HashMap<String, E>();
+		ids = new ArrayList<ASTId>();
+		values = new ArrayList<E>();
 	}
 
 	/**
-	 * Begins a new scope of environment that is the child of the current environment.
-	 * @return the child of the current environment.
+	 * Begins a new scope of env
+	 * @return the child of the current env
 	 */
 	@Override
 	public EnvironmentAbs<E> beginScope() {
@@ -33,8 +35,8 @@ public class Environment<E> implements EnvironmentAbs<E> {
 	}
 
 	/**
-	 * Ends this scope of environment by going to its parent environment.
-	 * @return the parent environment.
+	 * Ends this scope of env
+	 * @return the parent env
 	 */
 	@Override
 	public EnvironmentAbs<E> endScope() {
@@ -42,35 +44,63 @@ public class Environment<E> implements EnvironmentAbs<E> {
 	}
 
 	/**
-	 * Associates a identifier with a value.
+	 * Associates
 	 * @param id
-	 * @param val
+	 * @param value
 	 * @throws Exception 
 	 */
 	@Override
-	public void assoc(ASTId id, E val) throws Exception {
-		String identifier = id.getId();
-		E envVal = findId(identifier);
-//		|| ( envVal instanceof IValue && val instanceof IValue)
-		if ( envVal == null  )
-			nodeVals.put(identifier, val);
-		else {
-			throw new Exception("ID Already Assigned");
+	public void assoc(String id, E value) throws Exception {
+		E resultEnv = searchInEnv(id);
+		E result = null;
+		if (resultEnv != null) {
+			if(resultEnv instanceof ASTRefType && value instanceof IValue) {
+				((VRef)resultEnv).setValue((IValue)value);
+			}
+		} else {
+			try {
+				result = find(id);
+			} catch (Exception e) {
+				ids.add(new ASTId(id));
+				values.add(value);
+			}
+			if (result != null && resultEnv == null) {
+				ids.add(new ASTId(id));
+				values.add(value);
+			} else if (result != null && resultEnv != null) {
+				throw new Exception("Id is Already Declared");
+			}
 		}
 	}
 
 	/**
-	 * Searches for an identifier in an environment.
-	 * @param id.
-	 * @return val.
+	 * Searches for an id in the current env and parent envs
+	 * @param id
+	 * @return value
+	 * @throws Exception 
 	 */
 	@Override
-	public E findId(String id){
-		E val = nodeVals.get(id);
-		if ( val != null)
-			return val;
-		else if ( prev != null )
-			return prev.findId(id);
-		else return val;
+	public E find(String id) throws Exception{
+		E result = searchInEnv(id);
+		if (result != null)
+			return result;
+		else if (prev != null)
+			return prev.find(id);
+		throw new Exception("Can't Find the Element");
+	}
+
+	/**
+	 * Searches for an id in an env
+	 * @param id
+	 * @return value
+	 */
+	private E searchInEnv(String id) {
+		E value = null;
+		for (int i = 0; i < this.ids.size(); i++) {
+			if(this.ids.get(i).getId().equals(id)) {
+				value = values.get(i);
+			}
+		}
+		return value;
 	}
 }

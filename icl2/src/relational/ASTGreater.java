@@ -1,7 +1,6 @@
 package relational;
 
 import astNode.ASTNode;
-import astNode.Environment;
 import astNode.EnvironmentAbs;
 import compiler.CodeAbs;
 import compiler.CompEnvAbs;
@@ -46,7 +45,7 @@ public class ASTGreater implements ASTNode {
 	 * Checks >
 	 */
 	@Override
-	public Type typeCheck(Environment<Type> env) {
+	public Type typeCheck(EnvironmentAbs<Type> env) {
 		Type expr1_type = null;
 		Type expr2_type = null;
 		try {

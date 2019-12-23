@@ -107,20 +107,20 @@ public class ASTLet implements ASTNode {
 		code.emit("astore 0");
 		code.emit("");
 
-		//kk
-		Iterator<ASTNode> it  = nodeVals.keySet().iterator();
-		int i = 0;
-		while ( it.hasNext() ) {
-			ASTNode key = it.next();
-			ASTNode val = nodeVals.get(key);
-
-			val.compile(code, Cenv);
-			code.emit("putfield " + frameid + "/x" + i + " I" );
-			i++;
-		}
-
-		code.emit("aload " + frameid);
-		code.emit("putfield " + frameid + "/sl Ljava/lang/Object;" );
-		code.emit("astore " + frameid);
+//		//kk
+//		Iterator<ASTNode> it  = nodeVals.keySet().iterator();
+//		int i = 0;
+//		while ( it.hasNext() ) {
+//			ASTNode key = it.next();
+//			ASTNode val = nodeVals.get(key);
+//
+//			val.compile(code, Cenv);
+//			code.emit("putfield " + frameid + "/x" + i + " I" );
+//			i++;
+//		}
+//
+//		code.emit("aload " + frameid);
+//		code.emit("putfield " + frameid + "/sl Ljava/lang/Object;" );
+//		code.emit("astore " + frameid);
 	}
 }
